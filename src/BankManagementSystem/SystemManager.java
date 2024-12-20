@@ -31,7 +31,7 @@ public class SystemManager {
     public void editEmployee(int id, String newAddress, String newPosition) {
         for (Employee employee : employees) {
             if (employee.getId()==id) { // Use .equals() for string comparison
-                employee.editInfo(newAddress, newPosition);
+                employee.editEmployee(employees);
                 FileManager.saveEmployees(employees);
                 return;
             }
