@@ -5,6 +5,7 @@ import java.util.*;
 class Bank {
     private List<Employee> employees;
     private List<Client> clients;
+    private List<Transaction> transactions;
     private Map<String, Account> accounts;
     private Admin admin;
 
@@ -41,10 +42,10 @@ class Bank {
             String password = sc.nextLine();
 
             if (admin.authenticate(username, password)) {
-                admin.adminMenu(employees, clients);
+                admin.adminMenu(employees, clients,transactions);
             } else if (authenticateEmployee(username, password)) {
                 Employee emp = getEmployeeByUsername(username);
-                emp.employeeMenu(employees,clients, accounts);
+                emp.employeeMenu(employees, accounts);
             } else if (authenticateClient(username, password)) {
                 Client client = getClientByUsername(username);
                 client.clientMenu(accounts,clients);
