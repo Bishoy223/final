@@ -1,5 +1,4 @@
 package BankManagementSystem;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -14,8 +13,6 @@ class Employee {
     public String totalGrade;
     private boolean isAuthorized;
     private static int idCounter = 1;
-    ArrayList<Client> clients = new ArrayList<>();
-
 
     public Employee(String firstName, String lastName, String address, String position, String graduatedCollege, double yearOfGraduation, String totalGrade) {
         this.id = idCounter++;
@@ -49,6 +46,7 @@ class Employee {
         return id;
 
     }
+
     public void displayDetails() {
 
         System.out.println("Employee[ID=" + id + ", Name=" + firstName + " " + lastName + ", Address=" + address +
@@ -57,7 +55,7 @@ class Employee {
     }
 
 
-    public void employeeMenu(List<Employee> employees,List<Client> clients, Map<String, Account> accounts) {
+    public void employeeMenu(List<Employee> employees, Map<String, Account> accounts) {
         Scanner sc = new Scanner(System.in);
         SystemManager system = new SystemManager();
         while (true) {
@@ -72,34 +70,11 @@ class Employee {
 
             switch (choice) {
                 case 1: // Add Employee
-                    System.out.print("Enter Employee First Name: ");
-                    String firstName = sc.nextLine();
-                    System.out.print("Enter Employee Last Name: ");
-                    String lastName = sc.nextLine();
-                    System.out.print("Enter Address: ");
-                    String empAddress = sc.nextLine();
-                    System.out.print("Enter Position: ");
-                    String empPosition = sc.nextLine();
-                    System.out.print("Enter College: ");
-                    String graduatedCollege = sc.nextLine();
-                    System.out.print("Enter Year of Graduation: ");
-                    int yearOfGraduation = Integer.parseInt(sc.nextLine());
-                    System.out.print("Enter Total Grade: ");
-                    String totalGrade = sc.nextLine();
-                    system.addEmployee(firstName, lastName, empAddress, empPosition, graduatedCollege, yearOfGraduation, totalGrade);
+                    addEmployee(employees);
                     break;
                 case 2: // Edit Employee Information
-                    System.out.print("Enter Employee ID to Edit: ");
-                    int empId = Integer.parseInt(sc.nextLine());
-                    if (system.findEmployee(empId) == null) {
-                        System.out.println("Employee not found.");
-                        break;
-                    }
-                    System.out.print("Enter New Address (leave blank to skip): ");
-                    String newAddress = sc.nextLine();
-                    System.out.print("Enter New Position (leave blank to skip): ");
-                    String newPosition = sc.nextLine();
-                    system.editEmployee(empId, newAddress, newPosition);
+                    editEmployee(employees);
+
                     break;
                 case 3: // Display Employees
                     if (employees.isEmpty()) {
@@ -108,7 +83,6 @@ class Employee {
                         System.out.println("--- Employees' Details ---");
                         for (Employee employee : employees) {
                             employee.displayDetails();
-                            System.out.println();
                         }
                     }
                     break;
@@ -121,21 +95,60 @@ class Employee {
         }
     }
 
-    public void editInfo(String address, String position) {
-        if (address != null && !address.isEmpty()) {
-            this.address = address;
-        }
-        if (position != null && !position.isEmpty()) {
-            this.position = position;
-        }
-        System.out.println("Employee information updated.");
+    private void addEmployee(List<Employee> employees) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter First Name: ");
+        String firstName = sc.nextLine();
+        System.out.print("Enter Last Name: ");
+        String lastName = sc.nextLine();
+        System.out.print("Enter Address: ");
+        String address = sc.nextLine();
+        System.out.print("Enter Position: ");
+        String position = sc.nextLine();
+        System.out.print("Enter College: ");
+        String college = sc.nextLine();
+        System.out.print("Enter Year of Graduation: ");
+        double yearOfGraduation = sc.nextDouble();
+        sc.nextLine(); // Consume the newline
+        System.out.print("Enter Total Grade: ");
+        String grade = sc.nextLine();
+
+        Employee newEmployee = new Employee(firstName, lastName, address, position, college, yearOfGraduation, grade);
+        employees.add(newEmployee);
+
+        FileManager.saveEmployees(employees);
+        System.out.println("Employee added successfully!");
     }
 
+    public void editEmployee(List<Employee> employees) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter Employee ID to Edit: ");
+        int empId = sc.nextInt();
+        sc.nextLine(); // Consume the newline
 
-    @Override
-    public String toString() {
-        return "Employee[ID=" + id + ", Name=" + firstName + " " + lastName + ", Address=" + address +
-                ", Position=" + position + ", College=" + graduatedCollege + ", Year=" + yearOfGraduation +
-                ", Grade=" + totalGrade + "]";
+        Employee employeeToEdit = employees.stream()
+                .filter(e -> e.getId() == empId)
+                .findFirst()
+                .orElse(null);
+
+        if (employeeToEdit == null) {
+            System.out.println("Employee not found.");
+            return;
+        }
+
+        System.out.print("Enter New Address (leave blank to skip): ");
+        String newAddress = sc.nextLine();
+        System.out.print("Enter New Position (leave blank to skip): ");
+        String newPosition = sc.nextLine();
+
+        if (!newAddress.isEmpty()) {
+            employeeToEdit.address = newAddress;
+        }
+        if (!newPosition.isEmpty()) {
+            employeeToEdit.position = newPosition;
+        }
+
+        FileManager.saveEmployees(employees);
+        System.out.println("Employee information updated successfully!");
     }
 }
