@@ -22,12 +22,18 @@ class Bank {
         employees = FileManager.loadEmployees();
         clients = FileManager.loadClients();
         if (employees.isEmpty()) {
-            employees.add(new Employee("Bishoy","Ayman","Rehab","Manager","ASU",2027,"Very good"));
+            employees.add(new Employee("Hamza","Ahmed","Tagmo3","Manager","ASU",2027,"Very good"));
+            employees.add(new Employee("Abdelrahman","Ayman","Yasmin","CEO","ASU",2028,"Excellent"));
+            employees.add(new Employee("Hassan","Ahmed","Banfseg","COO","ASU",2029,"Good"));
             FileManager.saveEmployees(employees);
         }
 
         if (clients.isEmpty()) {
-            clients.add(new Client("1", "Akram", "Ayman", "akram", "01224784528", 2000));
+            clients.add(new Client("1", "Akram", "Ayman", "akram123", "01150526011", 2000));
+            clients.add(new Client("2", "Yassin", "Ayman", "yassin123", "01222216900", 2000));
+            clients.add(new Client("3", "Bishoy", "Ayman", "bishoy123", "01224784528", 2000));
+            clients.add(new Client("4", "Ziad", "Kamal", "ziad123", "010302855356", 2000));
+            clients.add(new Client("5", "Moaiyed", "Hady", "mo123", "01277674946", 2000));
             FileManager.saveClients(clients);
         }
     }
@@ -45,7 +51,7 @@ class Bank {
                 admin.adminMenu(employees, clients,transactions);
             } else if (authenticateEmployee(username, password)) {
                 Employee emp = getEmployeeByUsername(username);
-                emp.employeeMenu(employees, accounts);
+                emp.employeeMenu(employees, accounts,clients);
             } else if (authenticateClient(username, password)) {
                 Client client = getClientByUsername(username);
                 client.clientMenu(accounts,clients);
