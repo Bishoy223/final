@@ -24,8 +24,8 @@ class Client {
     }
 
     public boolean authenticate(String username, String password) {
-
-        return this.username.equals(username) && "pass".equals(password);
+        //username=client's username , password=pass
+        return this.username.equals(username) && "password".equals(password);
     }
     public String getID() {
         return ID;
@@ -83,56 +83,20 @@ class Client {
 
 
     public void clientMenu(Map<String, Account> accounts, List<Client> clients) {
-        Scanner scanner = new Scanner(System.in); // Ensure scanner is initialized here
+        Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("\n--- Client Menu ---");
-            System.out.println("1. Add New Client");
-            System.out.println("2. Display All Clients' Details");
-            System.out.println("3. Edit Personal Information for a Client");
-            System.out.println("4. Perform Operations on a Client's Account");
-            System.out.println("5. Delete Client");
-            System.out.println("6. Exit");
+            System.out.println("1. Edit Personal Information for a Client");
+            System.out.println("2. Perform Operations on a Client's Account");
+            System.out.println("3. Exit");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the leftover newline character
+            scanner.nextLine();
 
             switch (choice) {
+
+
                 case 1:
-                    // Add a new client
-                    System.out.print("Enter ID: ");
-                    String ID = scanner.next();
-
-                    System.out.print("Enter first name: ");
-                    String firstName = scanner.next();
-
-                    System.out.print("Enter last name: ");
-                    String lastName = scanner.next();
-
-                    System.out.print("Enter username: ");
-                    String username = scanner.next();
-
-                    System.out.print("Enter telephone number: ");
-                    String telephoneNumber = scanner.next();
-
-                    System.out.print("Enter initial balance: ");
-                    double initialBalance = scanner.nextDouble();
-                    clients.add(new Client(ID, firstName, lastName, username, telephoneNumber, initialBalance));
-                    FileManager.saveClients(clients);
-                    System.out.println("Client added successfully.");
-                    break;
-
-                case 2:
-                    if (clients.isEmpty()) {
-                        System.out.println("No clients found.");
-                    } else {
-                        System.out.println("--- Clients' Details ---");
-                        for (Client client : clients) {
-                            client.displayDetails();
-                        }
-                    }
-                    break;
-
-                case 3:
                     // Edit client information
                     System.out.print("Enter the ID of the client you want to edit: ");
                     String editID = scanner.next();
@@ -196,7 +160,7 @@ class Client {
                     }
                     break;
 
-                case 4:
+                case 2:
                     // Perform operations on a client's account
                     System.out.print("Enter the ID of the client whose account you want to access: ");
                     String clientID = scanner.next();
@@ -209,19 +173,7 @@ class Client {
                     }
                     break;
 
-                case 5:
-                    // Delete client
-                    System.out.print("Enter the ID of the client you want to delete: ");
-                    String deleteID = scanner.next();
-                    if (deleteClient((ArrayList<Client>) clients, deleteID)) {
-                        System.out.println("Client deleted successfully.");
-                    } else {
-                        System.out.println("Client with ID " + deleteID + " not found.");
-                    }
-                    FileManager.saveClients(clients);
-                    break;
-
-                case 6:
+                case 3:
                     System.out.println("Exiting...");
                     return;
 
@@ -239,16 +191,6 @@ class Client {
         }
         return null;
     }
-    private static boolean deleteClient(ArrayList<Client> clients, String ID) {
-        for (Client client : clients) {
-            if (client.getID().equals(ID)) {
-                clients.remove(client);
-                return true;
-            }
-        }
-        return false;
-    }
-
     private static void performAccountOperations(Scanner scanner, Client client, ArrayList<Client> clients) {
         while (true) {
             System.out.println("\n--- Account Operations for " + client.getUsername() + " ---");
